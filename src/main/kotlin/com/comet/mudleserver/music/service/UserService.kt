@@ -5,19 +5,23 @@ import com.comet.mudleserver.music.dto.UserResponseDTO
 import com.comet.mudleserver.music.repository.UserRepository
 import com.comet.mudleserver.response.Response
 import org.springframework.stereotype.Service
-import java.util.UUID
+import org.springframework.transaction.annotation.Transactional
+import java.util.*
 
 @Service
 class UserService(private val userRepository: UserRepository) {
 
-    fun createUser(userRequestDTO: UserRequestDTO) : UserResponseDTO{
-        return userRequestDTO.toEntity(10).let {
-            userRepository.save(it)
-            UserResponseDTO(it)
-        }
+    @Transactional
+    fun createUser(userRequestDTO: UserRequestDTO) {
+        userRepository.save(userRequestDTO.toEntity(10))
     }
 
-    fun getUser(uuid: UUID) : UserResponseDTO {
-        return UserResponseDTO(userRepository.findByUuid(uuid))
+    @Transactional
+    fun getUser(uuid: UUID): UserResponseDTO? {
+        val result = userRepository.findByUuid(uuid)
+        return if (result.isEmpty)
+            null
+        else
+            UserResponseDTO(result.get())
     }
 }
