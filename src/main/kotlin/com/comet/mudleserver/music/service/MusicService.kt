@@ -44,7 +44,7 @@ class MusicService(private val template: SimpMessagingTemplate, private val user
         else {
             result = ResponseEntity(Response("음악 신청이 완료되었습니다! - $title"), HttpStatus.OK)
             userService.consumeCoin(uuid, 1)
-            queue.add(Music(url, 0, title, false, false, "", UUID.randomUUID()))
+            queue.add(Music(url, 0, 0, title, false, false, "", UUID.randomUUID()))
         }
         println(result.body.toString())
         return CompletableFuture.completedFuture(result)
@@ -84,6 +84,11 @@ class MusicService(private val template: SimpMessagingTemplate, private val user
 
     fun isMusicAnswered(): Boolean {
         return !(music.isPlaying && !music.isAnswered)
+    }
+
+    //현재 재생 시간 업데이트 하기 (바로 get에 때려박지 않기)
+    fun updateTimeMusic() {
+        music.currentTime = (System.currentTimeMillis() - music.startTime) / 1000
     }
 
     @Transactional

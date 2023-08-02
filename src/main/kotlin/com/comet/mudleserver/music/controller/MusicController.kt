@@ -24,6 +24,7 @@ class MusicController(val musicService: MusicService) {
 
     @GetMapping("/music")
     fun music() : ObjectResponse<MusicResponseDTO> {
+        musicService.updateTimeMusic()
         return ObjectResponse("OK", MusicResponseDTO(musicService.music))
     }
 }
