@@ -9,4 +9,6 @@ interface UserRepository : JpaRepository<User, Long> {
 
     fun findByUuid(uuid: UUID) : Optional<User>
 
+    fun existsByUuid(uuid: UUID) : Boolean
+
 }

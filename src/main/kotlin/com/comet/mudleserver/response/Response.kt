@@ -1,3 +1,7 @@
 package com.comet.mudleserver.response
 
-open class Response(open val message : String)
+
+open class Response(val message : String) {
+
+    override fun toString() = "Reponse(message=$message)"
+}
