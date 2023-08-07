@@ -5,16 +5,19 @@ import com.comet.mudleserver.music.dto.UserResponseDTO
 import com.comet.mudleserver.music.model.User
 import com.comet.mudleserver.music.repository.UserRepository
 import com.comet.mudleserver.response.Response
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
 
 @Service
-class UserService(private val userRepository: UserRepository) {
+open class UserService(private val userRepository: UserRepository) {
 
-    @Transactional
+    @Value("\${music.creation.coin}")
+    var creationCoin : Int = 0
+
     fun createUser(userRequestDTO: UserRequestDTO) {
-        userRepository.save(userRequestDTO.toEntity(10))
+        userRepository.save(userRequestDTO.toEntity(creationCoin))
     }
 
     @Transactional
